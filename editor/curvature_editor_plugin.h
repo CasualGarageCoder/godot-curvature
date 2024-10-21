@@ -106,12 +106,12 @@ private:
 	};
 	GrabMode grabbing = GRAB_NONE;
 	Vector2 initial_grab_pos;
-	int initial_grab_index;
-	float initial_grab_left_tangent;
-	float initial_grab_right_tangent;
+	int initial_grab_index{ -1 };
+	float initial_grab_left_tangent{ 0. };
+	float initial_grab_right_tangent{ 0. };
 
-	bool snap_enabled = false;
-	int snap_count = 10;
+	bool snap_enabled{ false };
+	int snap_count{ 10 };
 };
 
 // BetterCurveEdit + toolbar
