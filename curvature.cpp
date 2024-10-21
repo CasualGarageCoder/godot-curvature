@@ -348,64 +348,7 @@ void BetterCurve::set_max_value(real_t p_max) {
 }
 
 real_t BetterCurve::sample(real_t p_offset) const {
-	if (_points.size() == 0) {
-		return 0;
-	}
-	if (_points.size() == 1) {
-		return _points[0].position.y;
-	}
-
-	int i = get_index(p_offset);
-
-	if (i == _points.size() - 1) {
-		return _points[i].position.y;
-	}
-
-	real_t local = p_offset - _points[i].position.x;
-
-	if (i == 0 && local <= 0) {
-		return _points[0].position.y;
-	}
-
-	return sample_local_nocheck(i, local);
-}
-
-real_t BetterCurve::sample_local_nocheck(int p_index, real_t p_local_offset) const {
-	const Point a = _points[p_index];
-	const Point b = _points[p_index + 1];
-
-	/* Cubic bézier
-	 *
-	 *       ac-----bc
-	 *      /         \
-	 *     /           \     Here with a.right_tangent > 0
-	 *    /             \    and b.left_tangent < 0
-	 *   /               \
-	 *  a                 b
-	 *
-	 *  |-d1--|-d2--|-d3--|
-	 *
-	 * d1 == d2 == d3 == d / 3
-	 */
-
-	// Control points are chosen at equal distances
-	real_t d = b.position.x - a.position.x;
-	if (Math::is_zero_approx(d)) {
-		return b.position.y;
-	}
-	p_local_offset /= d;
-	d /= 3.0;
-	real_t yac = a.position.y + d * a.right_tangent;
-	real_t ybc = b.position.y - d * b.left_tangent;
-
-	real_t y = Math::bezier_interpolate(a.position.y, yac, ybc, b.position.y, p_local_offset);
-
-	return y;
-}
-
-void BetterCurve::mark_dirty() {
-	_baked_cache_dirty = true;
-	emit_changed();
+	return sample_baked(p_offset);
 }
 
 Array BetterCurve::get_data() const {
@@ -763,6 +706,10 @@ real_t BetterCurve::_sample(real_t offset, const Vector<Point> &points, const in
 	return _sample_local_nocheck(idx, local, points);
 }
 
+real_t BetterCurve::sample_local_nocheck(int p_index, real_t p_local_offset) const {
+	return _sample_local_nocheck(p_index, p_local_offset, _points);
+}
+
 real_t BetterCurve::_sample_local_nocheck(int p_index, real_t p_local_offset, const Vector<Point> &points) {
 	const Point a = points[p_index];
 	const Point b = points[p_index + 1];
@@ -795,9 +742,3 @@ real_t BetterCurve::_sample_local_nocheck(int p_index, real_t p_local_offset, co
 
 	return y;
 }
-
-/*
-	Thread _update_thread;
-	Mutex _update_queue_mutex;
-	std::shared_mutex _getter_mutex;
-	*/

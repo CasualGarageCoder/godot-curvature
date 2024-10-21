@@ -3,105 +3,11 @@
 
 #include "core/io/resource.h"
 #include "core/object/object.h"
-#include "core/os/mutex.h"
 #include "core/os/thread.h"
 
 #include <mutex>
 #include <shared_mutex>
 #include <thread>
-
-/*
-class Curvature : public Resource {
-	GDCLASS(Curvature, Resource);
-	OBJ_SAVE_TYPE(Curvature);
-
-public:
-	struct ControlPoint {
-		Vector2 position;
-		Vector2 left_handle;
-		Vector2 right_handle;
-
-		ControlPoint() {}
-
-		ControlPoint(
-				const Vector2 &p,
-				const Vector2 &l = { 0., 0. },
-				const Vector2 &r = { 0., 0. }) :
-				position(p), left_handle(l), right_handle(r) {}
-	};
-
-public:
-	Curvature();
-	virtual ~Curvature();
-
-	void clear();
-
-	size_t get_point_count() const;
-	void set_point_count(size_t c);
-
-	int add_point(Vector2 p,
-			Vector2 l = { 0., 0. },
-			Vector2 r = { 0., 0. });
-	void remove_point(size_t idx);
-
-	void set_point_position(size_t i, Vector2 p);
-	Vector2 get_point_position(size_t i) const;
-
-	Vector2 set_point_left_handle(size_t i, Vector2 l);
-	Vector2 get_point_left_handle(size_t i) const;
-
-	Vector2 set_point_right_handle(size_t i, Vector2 r);
-	Vector2 get_point_right_handle(size_t i) const;
-
-	void set_y_min_value(real_t y);
-	real_t get_y_min_value() const;
-
-	void set_y_max_value(real_t y);
-	real_t get_y_max_value() const;
-
-	void set_x_min_value(real_t x);
-	real_t get_x_min_value() const;
-
-	void set_x_max_value(real_t x);
-	real_t get_x_max_value() const;
-
-	void set_cache_resolution(size_t c);
-	size_t get_cache_resolution() const;
-
-	real_t get_value(real_t x);
-
-	real_t get_cached_value(real_t x);
-
-	Array get_data() const;
-	void set_data(Array input);
-
-	bool _set(const StringName &p_name, const Variant &p_value);
-	bool _get(const StringName &p_name, Variant &r_ret) const;
-	void _get_property_list(List<PropertyInfo> *p_list) const;
-
-public:
-	friend void compute_curvature_cache(void *);
-
-protected:
-	static void _bind_methods();
-
-private:
-	void queue_update();
-	static void compute_cache(void *);
-
-private:
-	std::vector<ControlPoint> control_points;
-	std::vector<real_t> cache;
-	real_t x_min{ 0. };
-	real_t x_max{ 1. };
-	real_t y_min{ 0. };
-	real_t y_max{ 1. };
-	size_t resolution{ 100 };
-	Thread update_thread;
-	Mutex queue_mutex;
-	std::shared_mutex shared_mutex;
-};
-*/
 
 // y(x) curve
 class BetterCurve : public Resource {
@@ -181,7 +87,7 @@ public:
 	real_t get_range() const { return _max_value - _min_value; }
 
 	real_t sample(real_t p_offset) const;
-	real_t sample_local_nocheck(int p_index, real_t p_local_offset) const;
+	real_t sample_local_nocheck(int p_index, real_t p_offset) const;
 
 	void clean_dupes();
 
@@ -215,7 +121,6 @@ protected:
 	static void _bind_methods();
 
 private:
-	void mark_dirty();
 	int _add_point(Vector2 p_position,
 			real_t left_tangent = 0,
 			real_t right_tangent = 0,
