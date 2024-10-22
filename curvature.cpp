@@ -12,8 +12,8 @@ BetterCurve::BetterCurve() {
 }
 
 BetterCurve::~BetterCurve() {
-	if (_update_thread.joinable()) {
-		_update_thread.join();
+	if (_update_thread.is_started()) {
+		_update_thread.wait_to_finish();
 	}
 }
 
@@ -613,16 +613,16 @@ void BetterCurve::_bind_methods() {
 void BetterCurve::_queue_update() {
 	_update_queue_mutex.lock();
 	bool start = true;
-	if (_update_thread.joinable()) {
+	if (_update_thread.is_started()) {
 		if (!_update_queued) {
-			_update_thread.join();
+			_update_thread.wait_to_finish();
 		} else {
 			start = false;
 		}
 	}
 	if (start) {
 		_update_queued = true;
-		_update_thread = std::thread(BetterCurve::_update_bake, this);
+		_update_thread.start(BetterCurve::_update_bake, this);
 	}
 	_update_queue_mutex.unlock();
 	emit_changed();

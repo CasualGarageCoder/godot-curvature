@@ -7,7 +7,6 @@
 
 #include <mutex>
 #include <shared_mutex>
-#include <thread>
 
 // y(x) curve
 class BetterCurve : public Resource {
@@ -144,7 +143,7 @@ private:
 
 	bool _update_queued{ false };
 
-	std::thread _update_thread;
+	Thread _update_thread;
 	std::mutex _update_queue_mutex;
 	std::mutex _update_param_mutex;
 	std::shared_mutex _getter_mutex;
