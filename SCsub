@@ -3,13 +3,13 @@
 Import("env")
 Import("env_modules")
 
-
-
 env_curvature = env_modules.Clone()
 
 module_obj = []
 
 env_curvature.add_source_files(module_obj, "*.cpp")
-env_curvature.add_source_files(module_obj, "editor/*.cpp")
+
+if env.editor_build:
+    env_curvature.add_source_files(module_obj, "editor/*.cpp")
 
 env.modules_sources += module_obj

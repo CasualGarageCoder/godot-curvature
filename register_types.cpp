@@ -25,16 +25,19 @@
 
 #include "core/object/class_db.h"
 #include "curvature.h"
+#ifdef TOOLS_ENABLED
 #include "editor/curvature_editor_plugin.h"
+#endif
 
 void initialize_curvature_module(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
 		GDREGISTER_CLASS(BetterCurve);
-
-#ifdef TOOLS_ENABLED
-		EditorPlugins::add_by_type<BetterCurveEditorPlugin>();
-#endif
 	}
+#ifdef TOOLS_ENABLED
+	if (p_level == MODULE_INITIALIZATION_LEVEL_EDITOR) {
+		EditorPlugins::add_by_type<BetterCurveEditorPlugin>();
+	}
+#endif
 }
 
 void uninitialize_curvature_module(ModuleInitializationLevel p_level) {
