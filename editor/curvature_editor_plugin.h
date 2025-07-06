@@ -2,8 +2,8 @@
 #define CURVATURE_EDITOR_PLUGIN_H
 
 #include "../curvature.h"
-#include "editor/editor_inspector.h"
-#include "editor/editor_resource_preview.h"
+#include "editor/inspector/editor_inspector.h"
+#include "editor/inspector/editor_resource_preview.h"
 #include "editor/plugins/editor_plugin.h"
 
 class EditorSpinSlider;
@@ -155,7 +155,7 @@ class BetterCurveEditorPlugin : public EditorPlugin {
 public:
 	BetterCurveEditorPlugin();
 
-	virtual String get_name() const override { return "BetterCurve"; }
+	virtual String get_plugin_name() const override { return "BetterCurve"; }
 };
 
 class BetterCurvePreviewGenerator : public EditorResourcePreviewGenerator {

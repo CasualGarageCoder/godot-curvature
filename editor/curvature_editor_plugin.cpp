@@ -5,11 +5,11 @@
 #include "core/os/keyboard.h"
 #include "editor/editor_interface.h"
 #include "editor/editor_node.h"
-#include "editor/editor_settings.h"
 #include "editor/editor_string_names.h"
 #include "editor/editor_undo_redo_manager.h"
 #include "editor/gui/editor_spin_slider.h"
-#include "editor/plugins/canvas_item_editor_plugin.h"
+#include "editor/scene/canvas_item_editor_plugin.h"
+#include "editor/settings/editor_settings.h"
 #include "editor/themes/editor_scale.h"
 #include "scene/gui/flow_container.h"
 #include "scene/gui/menu_button.h"
@@ -942,7 +942,7 @@ void BetterCurveEditor::_notification(int p_what) {
 	switch (p_what) {
 		case NOTIFICATION_THEME_CHANGED: {
 			spacing = Math::round(BASE_SPACING * get_theme_default_base_scale());
-			snap_button->set_icon(get_editor_theme_icon(SNAME("SnapGrid")));
+			snap_button->set_button_icon(get_editor_theme_icon(SNAME("SnapGrid")));
 			PopupMenu *p = presets_button->get_popup();
 			p->clear();
 			p->add_icon_item(get_editor_theme_icon(SNAME("BetterCurveConstant")), TTR("Constant"), BetterCurveEdit::PRESET_CONSTANT);
