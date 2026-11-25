@@ -4,6 +4,7 @@
 #include "core/io/resource.h"
 #include "core/object/object.h"
 #include "core/os/thread.h"
+#include "core/object/class_db.h"
 
 #include <mutex>
 #include <shared_mutex>

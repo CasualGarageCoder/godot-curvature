@@ -2,6 +2,7 @@
 
 #include "core/input/input.h"
 #include "core/math/geometry_2d.h"
+#include "core/object/callable_mp.h"
 #include "core/os/keyboard.h"
 #include "editor/editor_interface.h"
 #include "editor/editor_node.h"
